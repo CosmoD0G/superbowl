@@ -20,7 +20,7 @@ public class NameFrame extends JDialog implements ActionListener {
     public NameFrame(BoxWriter controller) {
         this.controller = controller;
         this.setTitle("Enter Player Name");
-        this.setSize(500, 100);
+        this.setSize(700, 100);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setLayout(new FlowLayout());
         this.setAlwaysOnTop(true);

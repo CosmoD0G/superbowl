@@ -70,6 +70,7 @@ public class BoxWriter {
 
             Button removeButton = new Button("Remove Players");
             removeButton.setBounds(320, 25, 150, 50);
+            removeButton.setBackground(null);
             removeButton.addActionListener(e -> {
                 if (selected_buttons.size() > 0) {
                     for (BoxButton b : selected_buttons) {

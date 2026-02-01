@@ -94,45 +94,44 @@ class sportsbook {
     }
 
     public static void displayLeaderboardGUI() {
-    bubbleSort(bets); // Ensure sorting before displaying
+        bubbleSort(bets); // Ensure sorting before displaying
 
-    JFrame frame = new JFrame("Results");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setSize(400, 500);
+        JFrame frame = new JFrame("Results");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 500);
 
-    JTextPane textPane = new JTextPane();
-    textPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-    textPane.setEditable(false);
+        JTextPane textPane = new JTextPane();
+        textPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        textPane.setEditable(false);
     
-    StyledDocument doc = textPane.getStyledDocument();
+        StyledDocument doc = textPane.getStyledDocument();
     
-    // Create styles for bold and regular text
-    Style boldStyle = textPane.addStyle("Bold", null);
-    StyleConstants.setBold(boldStyle, true);
+        // Create styles for bold and regular text
+        Style boldStyle = textPane.addStyle("Bold", null);
+        StyleConstants.setBold(boldStyle, true);
     
-    Style regularStyle = textPane.addStyle("Regular", null);
-    StyleConstants.setBold(regularStyle, false);
+        Style regularStyle = textPane.addStyle("Regular", null);
+        StyleConstants.setBold(regularStyle, false);
 
-    try {
-        doc.insertString(doc.getLength(), "Superbowl LIX Prop Bet Results\n", boldStyle);
-        doc.insertString(doc.getLength(), "------------------------------\n", regularStyle);
+        try {
+            doc.insertString(doc.getLength(), "Superbowl LIX Prop Bet Results\n", boldStyle);
+            doc.insertString(doc.getLength(), "------------------------------\n", regularStyle);
 
-        int rank = 1;
-        for (bettor b : bets) {
-            String line = String.format("%-3d %-15s %2d/15", rank, b.name, b.score);
-            if (b.tiebreaker_active) {
-                line += String.format("  (Tiebreaker: %d)", b.tiebreaker_error);
-            }
-            line += "\n";
-
+            int rank = 1;
+            for (bettor b : bets) {
+                String line = String.format("%-3d %-15s %2d/15", rank, b.name, b.score);
+                if (b.tiebreaker_active) {
+                    line += String.format("  (Tiebreaker: %d)", b.tiebreaker_error);
+                }
+                line += "\n";
             // First two bettors in bold
-            if (rank <= 2) {
-                doc.insertString(doc.getLength(), line, boldStyle);
-            } else {
-                doc.insertString(doc.getLength(), line, regularStyle);
+                if (rank <= 2) {
+                    doc.insertString(doc.getLength(), line, boldStyle);
+               } else {
+                    doc.insertString(doc.getLength(), line, regularStyle);
+              }
+               rank++;
             }
-            rank++;
-        }
     } catch (BadLocationException e) {
         e.printStackTrace();
     }
@@ -143,10 +142,70 @@ class sportsbook {
     frame.setVisible(true);
 }
 
-    public static void main(String[] args) {
+    
+    public static String generateHTMLStandings() {
+        StringBuilder html = new StringBuilder();
+        bubbleSort(bets);
+        for (bettor b : bets) {
+            html.append(b.name).append(": ").append(b.score).append("/15<br>\n");
+            if (b.tiebreaker_active) {
+                html.append("&nbsp;&nbsp;(Tiebreaker: off by ").append(b.tiebreaker_error).append(")<br>\n");
+            }
+        }
+        return html.toString();
+    }
+
+    public static String generateHTMLanswers() {
+        StringBuilder html = new StringBuilder();
+        html.append("<h2>Answer Key</h2>\n<table>\n<tr><th>Prop</th><th>Answer</th></tr>\n");
+        for (int i = 0; i < key.props.length; i++) {
+            html.append("<tr><td>").append(i + 1).append("</td><td>").append(key.props[i]).append("</td></tr>\n");
+        }
+        html.append("</table>\n");
+        return html.toString();
+    }
+
+    public static void assembleHTML() {
+        String htmlTemplate = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Superbowl LIX Prop Bet Results</title>
+            <link rel="stylesheet" href="styles.css">
+        </head>
+        <body>
+            <div class="container">
+                <h1>Superbowl LIX Prop Bet Results</h1>
+                <div class="leaderboard">
+                    <h2>Leaderboard</h2>
+                    %s
+                </div>
+                <div class="answers">
+                    %s
+                </div>
+            </div>
+        </body>
+        </html>
+        """;
+
+        String standingsHTML = generateHTMLStandings();
+        //String answersHTML = generateHTMLanswers();
+        String finalHTML = String.format(htmlTemplate, standingsHTML, "");
+
+        // Write finalHTML to a file named "results.html"
+        try (java.io.FileWriter writer = new java.io.FileWriter("results.html")) {
+            writer.write(finalHTML);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public sportsbook() {
         createBettors();
         printLeaderboard(); // Print to console
         displayLeaderboardGUI(); // Show in GUI window
+        assembleHTML();
     }
 }
 

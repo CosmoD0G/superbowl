@@ -2,9 +2,117 @@
 <html>
 <head>
     <title>Admin Page</title>
+
+
+<style>
+      .container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 30px;
+  margin-top: 50px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: left;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.choice {
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: aquamarine;
+}
+
+.propHeader {
+  font-weight: bold;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+    </style>
 </head>
+
+
+
+
+
+
 <body>
+
     <h1>Admin Dashboard</h1>
     <p>Welcome to the admin panel. Here you can manage users and settings.</p>
+  
+
+<div id="selector" class="container">
+ 
+
+  <div class="row">
+    <h1 class="propHeader">NATIONAL ANTHEM</h1>
+    <div class="buttons">
+      <button class="choice">UNDER</button>
+      <button class="choice">OVER</button>
+
+    </div>
+
+    <div id="indicator">
+      Selected: <span id="selectedValue">Option 1</span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+
+
+  const buttons = document.querySelectorAll(".choice");
+  const selectedValue = document.getElementById("selectedValue");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      selectedValue.textContent = btn.innerText;
+    });
+  });
+
+
+// NATL ANTHEM
+function updateNationalAnthem(value) {
+  if (value <= 120) {
+    return "UNDER";
+  } else {
+    return "OVER";
+  }
+}
+
+// COMMERCIAL
+function updateCommercial(value) {
+  return value;
+}
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
 </body>
 </html>
