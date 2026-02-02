@@ -17,6 +17,7 @@ class sportsbook {
     public static ArrayList<bettor> bets = new ArrayList<>();
     public static bettor key;
 
+    // Read bettors from CSV file and create bettor objects
     public static void createBettors() {
         String filePath = "props.csv"; // Replace with your CSV file path
 
@@ -41,6 +42,7 @@ class sportsbook {
         }
     }
 
+    // Bubble sort implementation to sort bettors by score and tiebreaker_error
     public static void bubbleSort(ArrayList<bettor> players) {
         int n = players.size();
         boolean swapped;
@@ -72,12 +74,14 @@ class sportsbook {
         }
     }
 
+    // swap two elements in arraylist
     private static void swap(ArrayList<bettor> players, int i, int j) {
         bettor temp = players.get(i);
         players.set(i, players.get(j));
         players.set(j, temp);
     }
 
+    // Print leaderboard to console
     public static void printLeaderboard() {
         bubbleSort(bets);
         System.out.println("PRINTING LEADERBOARD\nLENGTH OF BETS ARRAYLIST: " + bets.size() + "\n");
@@ -93,6 +97,7 @@ class sportsbook {
         }
     }
 
+    // Display leaderboard in a JFrame GUI
     public static void displayLeaderboardGUI() {
         bubbleSort(bets); // Ensure sorting before displaying
 
@@ -142,22 +147,36 @@ class sportsbook {
     frame.setVisible(true);
 }
 
-    public static String htmlFileToString(String filePath) throws IOException {
+    // Convert HTML file to String
+    public static String FileToString(String filePath) throws IOException {
         return Files.readString(Path.of(filePath));
     }
 
+    // Generate HTML standings for results page based on sorted bettors
     public static String generateHTMLStandings() {
         StringBuilder html = new StringBuilder();
+
+
+
+
+
+
         bubbleSort(bets);
+        html.append("<table>\n<tr><th>Rank</th><th>Name</th><th>Score</th></tr>\n");
+        int i = 0;
         for (bettor b : bets) {
-            html.append(b.name).append(": ").append(b.score).append("/15<br>\n");
+            html.append("<tr><td>").append(i + 1).append("</td><td class=\"name-cell\">").append(b.name).append("</td><td>").append(b.score).append("/15</td>\n");
             if (b.tiebreaker_active) {
-                html.append("&nbsp;&nbsp;(Tiebreaker: off by ").append(b.tiebreaker_error).append(")<br>\n");
+                html.append("<td></td><td>(Tiebreaker: off by ").append(b.tiebreaker_error).append(")</td><td></td>\n");
             }
+            i++;
+            html.append("</tr>\n");
         }
+        html.append("</table>\n");
         return html.toString();
     }
 
+    // Generate HTML for answer key
     public static String generateHTMLanswers() {
         StringBuilder html = new StringBuilder();
         html.append("<h2>Answer Key</h2>\n<table>\n<tr><th>Prop</th><th>Answer</th></tr>\n");
@@ -168,6 +187,7 @@ class sportsbook {
         return html.toString();
     }
 
+    // Assemble final HTML results page
     public static void assembleHTML() throws IOException {
         String htmlTemplate = """
         <!DOCTYPE html>
@@ -176,13 +196,13 @@ class sportsbook {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Superbowl LIX Prop Bet Results</title>
-            %s
+            <style>%s</style>
         </head>
         <body>
             <div class="container">
                 <h1>Superbowl LIX Prop Bet Results</h1>
                 <div class="leaderboard">
-                    <h2>Leaderboard</h2>
+                    <h2 class="leaderboard-header">Leaderboard</h2>
                     %s
                 </div>
                 <div class="answers">
@@ -195,7 +215,7 @@ class sportsbook {
 
 
         //String answersHTML = generateHTMLanswers();
-        String finalHTML = String.format(htmlTemplate, htmlFileToString("leaderboardStyleHeader.html"), generateHTMLStandings(), generateHTMLanswers());
+        String finalHTML = String.format(htmlTemplate, FileToString("style.css"), generateHTMLStandings(), generateHTMLanswers());
 
         // Write finalHTML to a file named "results.html"
         try (java.io.FileWriter writer = new java.io.FileWriter("results.html")) {
