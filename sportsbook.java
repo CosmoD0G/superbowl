@@ -16,6 +16,8 @@ import java.util.ArrayList;
 class sportsbook {
     public static ArrayList<bettor> bets = new ArrayList<>();
     public static bettor key;
+    public static bettor confirmed;
+
 
     // Read bettors from CSV file and create bettor objects
     public static void createBettors() {
@@ -31,7 +33,9 @@ class sportsbook {
                 // Line 2 is the answer key
                 if (line_num == 2) {
                     key = new bettor(values);
-                } else if (line_num > 2) {
+                } else if (line_num == 3) {
+                    confirmed = new bettor(values);
+                } else if (line_num > 3) {
                     bets.add(new bettor(values, key));
                 }
 
@@ -80,6 +84,43 @@ class sportsbook {
         players.set(i, players.get(j));
         players.set(j, temp);
     }
+
+    public static String getQInfoFromNum(int ques, int ans, boolean isAnswer, String filepath) {
+        String optionText = "";
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            int line_num = 1;
+
+            while ((line = br.readLine()) != null) {
+                if (line_num == ques + 1) { // +1 to account for header
+                    if (!isAnswer) {
+                        optionText = line.split(",")[0];
+                        break;
+                    }
+                    String[] options = line.split(",");
+                    if (ans >= 1 && ans < options.length) {
+                        optionText = options[ans];
+                    } else {
+                        optionText = "Invalid answer number";
+                    }
+                    break;
+                }
+                line_num++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+    }
+    return optionText;
+}
+        
+    public static boolean isConfirmed(int quesIndex) {
+        if (quesIndex == 16) { // Tiebreaker question
+            return confirmed.tiebreaker != 0;
+
+        }
+        return confirmed.props[quesIndex] != 0;
+    }
+
 
     // Print leaderboard to console
     public static void printLeaderboard() {
@@ -162,13 +203,39 @@ class sportsbook {
 
 
         bubbleSort(bets);
-        html.append("<table>\n<tr><th>Rank</th><th>Name</th><th>Score</th></tr>\n");
+        html.append("<table>\n<tr><th>Rank</th><th>Name</th><th>Score</th><th>Tiebreaker Error</th></tr>\n");
         int i = 0;
+        int prevScore = bets.get(0).score;
+        String alt_color = "#f9f9f9";
         for (bettor b : bets) {
-            html.append("<tr><td>").append(i + 1).append("</td><td class=\"name-cell\">").append(b.name).append("</td><td>").append(b.score).append("/15</td>\n");
-            if (b.tiebreaker_active) {
-                html.append("<td></td><td>(Tiebreaker: off by ").append(b.tiebreaker_error).append(")</td><td></td>\n");
+            if (b.score != prevScore) {
+                // Swap alt_color for next row
+                if (alt_color.equals("#f9f9f9")) {
+                    alt_color = "#e4e4e4";
+                } else {
+                    alt_color = "#f9f9f9";
+                }
             }
+            String color = "";
+            if (i == 0) {
+                color = "#ffeb3b"; // Yellow for first place
+            } else if (i == 1) {
+                color = "#c0c0c0"; // Silver for second place
+            } else {
+                color = alt_color; // Alternate color for third and beyond
+            }
+            prevScore = b.score;
+            
+            
+
+            html.append("<tr style=\"background-color: "+color+"\"><td>").append(i + 1).append("</td><td class=\"name-cell\">").append(b.name).append("</td><td>").append(b.score).append("/15</td>\n");
+            html.append("<td>");
+            if (b.tiebreaker_active) {
+                html.append(b.tiebreaker_error);
+            }
+            
+            html.append("</td>\n");
+            
             i++;
             html.append("</tr>\n");
         }
@@ -179,10 +246,13 @@ class sportsbook {
     // Generate HTML for answer key
     public static String generateHTMLanswers() {
         StringBuilder html = new StringBuilder();
-        html.append("<h2>Answer Key</h2>\n<table>\n<tr><th>Prop</th><th>Answer</th></tr>\n");
+        html.append("<h2 class=\"leaderboard-header\">Answer Key</h2>\n<table>\n<tr><th>Prop</th><th>Answer</th></tr>\n");
         for (int i = 0; i < key.props.length; i++) {
-            html.append("<tr><td>").append(i + 1).append("</td><td>").append(key.props[i]).append("</td></tr>\n");
+            String color = isConfirmed(i) ? "#a8e6cf" : "#f9f9f9";
+            html.append("<tr style=\"background-color: "+color+"\"><td>").append(getQInfoFromNum(i+1, key.props[i], false, "answerMap.csv")).append("</td><td>").append(getQInfoFromNum(i+1, key.props[i], true, "answerMap.csv")).append("</td></tr>\n");
         }
+        String color = isConfirmed(16) ? "#a8e6cf" : "#f9f9f9";
+        html.append("<tr style=\"background-color: "+color+"\"><td>").append("Tiebreaker (Total Points)").append("</td><td>").append(key.tiebreaker).append("</td></tr>\n");
         html.append("</table>\n");
         return html.toString();
     }

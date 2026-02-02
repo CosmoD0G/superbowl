@@ -14,9 +14,10 @@
 table, th, td {
     border-collapse: collapse;
     margin-bottom: 30px;
-    background-color: #f9f9f9;
+
     border: 1px solid black;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 5px 10px;
 }
 
 .name-cell {
@@ -30,67 +31,72 @@ table, th, td {
         <div class="leaderboard">
             <h2 class="leaderboard-header">Leaderboard</h2>
             <table>
-<tr><th>Rank</th><th>Name</th><th>Score</th></tr>
-<tr><td>1</td><td class="name-cell">TEST</td><td>15/15</td>
+<tr><th>Rank</th><th>Name</th><th>Score</th><th>Tiebreaker Error</th></tr>
+<tr style="background-color: #ffeb3b"><td>1</td><td class="name-cell">TEST</td><td>15/15</td>
+<td></td>
 </tr>
-<tr><td>2</td><td class="name-cell">Anthony</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 3)</td><td></td>
+<tr style="background-color: #c0c0c0"><td>2</td><td class="name-cell">Anthony</td><td>9/15</td>
+<td>3</td>
 </tr>
-<tr><td>3</td><td class="name-cell">Karen</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 7)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>3</td><td class="name-cell">Karen</td><td>9/15</td>
+<td>7</td>
 </tr>
-<tr><td>4</td><td class="name-cell">Issac</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 9)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>4</td><td class="name-cell">Issac</td><td>9/15</td>
+<td>9</td>
 </tr>
-<tr><td>5</td><td class="name-cell">Rob</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 13)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>5</td><td class="name-cell">Rob</td><td>9/15</td>
+<td>13</td>
 </tr>
-<tr><td>6</td><td class="name-cell">Scott</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 14)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>6</td><td class="name-cell">Scott</td><td>9/15</td>
+<td>14</td>
 </tr>
-<tr><td>7</td><td class="name-cell">Michael</td><td>9/15</td>
-<td></td><td>(Tiebreaker: off by 16)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>7</td><td class="name-cell">Michael</td><td>9/15</td>
+<td>16</td>
 </tr>
-<tr><td>8</td><td class="name-cell">Paul</td><td>8/15</td>
-<td></td><td>(Tiebreaker: off by 12)</td><td></td>
+<tr style="background-color: #f9f9f9"><td>8</td><td class="name-cell">Paul</td><td>8/15</td>
+<td>12</td>
 </tr>
-<tr><td>9</td><td class="name-cell">Joey</td><td>8/15</td>
-<td></td><td>(Tiebreaker: off by 20)</td><td></td>
+<tr style="background-color: #f9f9f9"><td>9</td><td class="name-cell">Joey</td><td>8/15</td>
+<td>20</td>
 </tr>
-<tr><td>10</td><td class="name-cell">Gerry</td><td>7/15</td>
-<td></td><td>(Tiebreaker: off by 12)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>10</td><td class="name-cell">Gerry</td><td>7/15</td>
+<td>12</td>
 </tr>
-<tr><td>11</td><td class="name-cell">Anya</td><td>7/15</td>
-<td></td><td>(Tiebreaker: off by 17)</td><td></td>
+<tr style="background-color: #e4e4e4"><td>11</td><td class="name-cell">Anya</td><td>7/15</td>
+<td>17</td>
 </tr>
-<tr><td>12</td><td class="name-cell">Clint</td><td>6/15</td>
+<tr style="background-color: #f9f9f9"><td>12</td><td class="name-cell">Clint</td><td>6/15</td>
+<td></td>
 </tr>
-<tr><td>13</td><td class="name-cell">Lisa</td><td>4/15</td>
+<tr style="background-color: #e4e4e4"><td>13</td><td class="name-cell">Lisa</td><td>4/15</td>
+<td></td>
 </tr>
-<tr><td>14</td><td class="name-cell">Valeri</td><td>3/15</td>
+<tr style="background-color: #f9f9f9"><td>14</td><td class="name-cell">Valeri</td><td>3/15</td>
+<td></td>
 </tr>
 </table>
 
         </div>
         <div class="answers">
-            <h2>Answer Key</h2>
+            <h2 class="leaderboard-header">Answer Key</h2>
 <table>
 <tr><th>Prop</th><th>Answer</th></tr>
-<tr><td>1</td><td>2</td></tr>
-<tr><td>2</td><td>4</td></tr>
-<tr><td>3</td><td>1</td></tr>
-<tr><td>4</td><td>3</td></tr>
-<tr><td>5</td><td>2</td></tr>
-<tr><td>6</td><td>2</td></tr>
-<tr><td>7</td><td>2</td></tr>
-<tr><td>8</td><td>2</td></tr>
-<tr><td>9</td><td>2</td></tr>
-<tr><td>10</td><td>1</td></tr>
-<tr><td>11</td><td>2</td></tr>
-<tr><td>12</td><td>2</td></tr>
-<tr><td>13</td><td>1</td></tr>
-<tr><td>14</td><td>2</td></tr>
-<tr><td>15</td><td>2</td></tr>
+<tr style="background-color: #f9f9f9"><td>Natl Anthem</td><td> 2:01 or MORE</td></tr>
+<tr style="background-color: #f9f9f9"><td>Commercial</td><td> MOVIE/TV</td></tr>
+<tr style="background-color: #f9f9f9"><td>First Play</td><td> RUN</td></tr>
+<tr style="background-color: #f9f9f9"><td>First Drive</td><td> PUNT</td></tr>
+<tr style="background-color: #f9f9f9"><td>First Scorer</td><td> SEA</td></tr>
+<tr style="background-color: #a8e6cf"><td>Halftime Leader</td><td> SEA</td></tr>
+<tr style="background-color: #f9f9f9"><td>Total Points Scored</td><td> 46 or MORE</td></tr>
+<tr style="background-color: #a8e6cf"><td>Longest FG Att</td><td> 45 yds or MORE</td></tr>
+<tr style="background-color: #f9f9f9"><td>Total Turnovers</td><td> 3 or MORE</td></tr>
+<tr style="background-color: #f9f9f9"><td>QB Rush TD</td><td> YES</td></tr>
+<tr style="background-color: #f9f9f9"><td>QB Pass Yards</td><td> Darnold</td></tr>
+<tr style="background-color: #f9f9f9"><td>Most Rush Yards</td><td> Henderson</td></tr>
+<tr style="background-color: #f9f9f9"><td>JSN Recieving Yards</td><td> 0-46</td></tr>
+<tr style="background-color: #a8e6cf"><td>Total Sacks</td><td> 6 or MORE</td></tr>
+<tr style="background-color: #f9f9f9"><td>Winner</td><td> SEA</td></tr>
+<tr style="background-color: #f9f9f9"><td>Tiebreaker (Total Points)</td><td>62</td></tr>
 </table>
 
         </div>

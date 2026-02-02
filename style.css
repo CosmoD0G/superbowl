@@ -8,9 +8,10 @@
 table, th, td {
     border-collapse: collapse;
     margin-bottom: 30px;
-    background-color: #f9f9f9;
+
     border: 1px solid black;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 5px 10px;
 }
 
 .name-cell {
