@@ -2,11 +2,11 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import javax.swing.text.*;
 
 
@@ -18,7 +18,7 @@ class sportsbook {
     public static bettor key;
 
     public static void createBettors() {
-        String filePath = "Bets2.csv"; // Replace with your CSV file path
+        String filePath = "props.csv"; // Replace with your CSV file path
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -86,7 +86,7 @@ class sportsbook {
         for (bettor b : bets) {
             System.out.print(i + "- " + b.name + " " + b.score + "/15");
             if (b.tiebreaker_active) {
-                System.out.println(" TIEBREAKER: off from actual score by: " + b.tiebreaker_error);
+                System.out.print(" TIEBREAKER: off from actual score by: " + b.tiebreaker_error);
             }
             System.out.println();
             i++;
@@ -142,7 +142,10 @@ class sportsbook {
     frame.setVisible(true);
 }
 
-    
+    public static String htmlFileToString(String filePath) throws IOException {
+        return Files.readString(Path.of(filePath));
+    }
+
     public static String generateHTMLStandings() {
         StringBuilder html = new StringBuilder();
         bubbleSort(bets);
@@ -165,7 +168,7 @@ class sportsbook {
         return html.toString();
     }
 
-    public static void assembleHTML() {
+    public static void assembleHTML() throws IOException {
         String htmlTemplate = """
         <!DOCTYPE html>
         <html lang="en">
@@ -173,7 +176,7 @@ class sportsbook {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Superbowl LIX Prop Bet Results</title>
-            <link rel="stylesheet" href="styles.css">
+            %s
         </head>
         <body>
             <div class="container">
@@ -190,9 +193,9 @@ class sportsbook {
         </html>
         """;
 
-        String standingsHTML = generateHTMLStandings();
+
         //String answersHTML = generateHTMLanswers();
-        String finalHTML = String.format(htmlTemplate, standingsHTML, "");
+        String finalHTML = String.format(htmlTemplate, htmlFileToString("leaderboardStyleHeader.html"), generateHTMLStandings(), generateHTMLanswers());
 
         // Write finalHTML to a file named "results.html"
         try (java.io.FileWriter writer = new java.io.FileWriter("results.html")) {
@@ -201,7 +204,8 @@ class sportsbook {
             e.printStackTrace();
         }
     }
-    public sportsbook() {
+
+    public sportsbook() throws IOException {
         createBettors();
         printLeaderboard(); // Print to console
         displayLeaderboardGUI(); // Show in GUI window

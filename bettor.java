@@ -9,6 +9,7 @@ public class bettor {
     public int tiebreaker = 0;
     public int tiebreaker_error = 0;
     public boolean tiebreaker_active = false;
+    
     public void score(bettor KEY) {
        for (int i = 0; i < 15; i++) {
             if (props[i]==KEY.props[i]) {

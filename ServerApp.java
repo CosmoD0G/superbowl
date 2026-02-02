@@ -10,11 +10,15 @@ import java.nio.file.Files;
 public class ServerApp {
 
     private static void serveFile(HttpExchange exchange, String fileName) throws IOException {
-        File file = new File("web/" + fileName);
+
+        File file = new File(System.getProperty("user.dir") + "/" + fileName);
 
         if (!file.exists()) {
            exchange.sendResponseHeaders(404, -1);
+           System.out.println("File not found: " + file);
            return;
+        } else {
+              System.out.println("Serving file: " + file);
         }
 
         byte[] bytes = Files.readAllBytes(file.toPath());
@@ -26,6 +30,8 @@ public class ServerApp {
     }
 
     public static void main(String[] args) throws IOException {
+        System.out.println("Working directory: " + System.getProperty("user.dir"));
+
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
         server.createContext("/run", exchange -> {
