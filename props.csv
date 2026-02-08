@@ -1,10 +1,10 @@
-Name,Natl Anthem,Commercial,First Play,First Drive,First Scorer,Halftime Leader,Over/Under,Longest FG Att,Total Turnovers,QB Pass Yards,Mahomes Rush TD,Saquon ALT Rush Yards,Rec Yards,Sacks,Winner,TIEBREAKER
-KEY,2,4,1,3,2,2,2,2,2,1,2,2,1,2,2,62
-CONFIRMED,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0
+Name,Natl Anthem,Commercial,First Play,First Drive,First Scorer,Halftime Leader,Over/Under,Longest FG Att,Total Turnovers,QB Pass Yards,QB Rush,Rush Yds,ECRA Alt,Sacks,Winner,TIEBREAKER
+KEY,1,2,1,4,0,0,0,0,0,0,2,1,1,0,0,0
+CONFIRMED,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0
 TEST,2,4,1,3,2,2,2,2,2,1,2,2,1,2,2,62
 Lisa,1,2,1,1,1,1,2,2,1,2,2,4,2,1,1,51
 Karen,2,5,1,3,2,2,2,2,2,2,1,4,4,1,2,55
-Anthony,2,3,1,1,2,2,2,2,1,1,2,3,4,2,1,59
+Anthony,1,1,1,1,1,1,1,1,1,1,1,3,4,2,1,59
 Clint,1,3,1,3,1,1,1,2,2,1,1,3,1,1,1,48
 Anya,2,3,1,4,1,1,2,1,1,1,2,2,5,1,2,45
 Joey,1,1,1,3,1,1,2,1,2,1,2,2,3,1,2,42

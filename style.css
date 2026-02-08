@@ -14,6 +14,21 @@ table, th, td {
     padding: 5px 10px;
 }
 
+button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: rgb(255, 216, 166);
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: black;
+            border: none;
+            cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(255, 195, 84);
+}
+
+
 .name-cell {
     text-align: left;
     padding-left: 10px;

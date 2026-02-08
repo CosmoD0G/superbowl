@@ -17,9 +17,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 class sportsbook {
+    // PROP BET Variables
     public static ArrayList<bettor> bets = new ArrayList<>();
     public static bettor key;
     public static bettor confirmed;
+
+    // BOX Variables
+    public static ArrayList<String[]> rows = new ArrayList<String[]>();
+
+    public static int scoreNE = 0;
+    public static int scoreSEA = 0;
+
 
 
     // Read bettors from CSV file and create bettor objects
@@ -105,7 +113,7 @@ class sportsbook {
                     if (ans >= 1 && ans < options.length) {
                         optionText = options[ans];
                     } else {
-                        optionText = "Invalid answer number";
+                        optionText = "";
                     }
                     break;
                 }
@@ -293,7 +301,7 @@ class sportsbook {
         String htmlTemplate = """
         <!DOCTYPE html>
         <html lang="en">
-        <head>
+           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Superbowl LIX Prop Bet Results</title>
@@ -301,7 +309,10 @@ class sportsbook {
         </head>
         <body>
             <div class="container">
-                <h1>Superbowl LIX Prop Bet Results</h1>
+                
+                
+                <h1 class="leaderboard-header">Superbowl LX Prop Bet Results</h1>
+                <button onclick="location.href='boxes.html'">Go to Boxes</button>
                 <div class="leaderboard">
                     <h2 class="leaderboard-header">Leaderboard</h2>
                     %s
@@ -326,12 +337,123 @@ class sportsbook {
         }
     }
 
+
+
+
+// ===========================================================================
+// ========================== BOXES PAGE CODE BELOW ==========================
+// ===========================================================================
+
+
+    public static void createBoxes() {
+        String filePath = "boxes.csv"; // Replace with your CSV file path
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            int line_num = 1;
+
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                rows.add(values);
+                line_num++;
+                System.out.println("Read line " + line_num + ": " + String.join(", ", values));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+    }
+}
+
+
+    public static String BOXgenerateHTMLStandings() {
+        StringBuilder html = new StringBuilder();
+
+
+        createBoxes();
+        html.append("<table>\n");
+        int i = 0;
+        int j = 0;
+        for (String r[] : rows) {
+            html.append("<tr>\n");
+            if (i==0) {
+                i++;
+                continue; // Skip header row
+            }
+            for (String c : r) {
+                System.out.println(c);
+                int NEscore = Integer.parseInt(r[0]);
+                if (j==0) {
+                    j++;
+                    continue; // Skip NE score column
+                }
+                if (NEscore == scoreNE && Integer.parseInt(rows.get(0)[j]) == scoreSEA) {
+                    html.append("<td style=\"background-color: #3bff72\">").append(c).append("</td>");
+                } else {
+                    html.append("<td style=\"background-color: #f9f9f9\">").append(c).append("</td>");
+                }
+
+                }
+                j++;
+                
+            }
+            html.append("</tr>\n");
+            i++;
+        
+        html.append("</table>\n");
+        return html.toString();
+    }
+
+
+
+
+    // Assemble final HTML results page
+    public static void BOXassembleHTML() throws IOException {
+        String htmlTemplate = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Superbowl LIX Score Boxes</title>
+            <style>%s</style>
+        </head>
+        <body>
+            <div class="container">
+                
+                
+                <h1 class="leaderboard-header">Superbowl LX Score Boxes Results</h1>
+                <button onclick="location.href='results.html'">Go to Prop Bets</button>
+                <div class="leaderboard">
+                    <h2 class="leaderboard-header">Leaderboard</h2>
+                    %s
+                </div>
+                <div class="answers">
+                    %s
+                </div>
+            </div>
+        </body>
+        </html>
+        """;
+
+
+        //String answersHTML = generateHTMLanswers();
+        String finalHTML = String.format(htmlTemplate, FileToString("style.css"), BOXgenerateHTMLStandings(), "");
+
+        // Write finalHTML to a file named "boxes.html"
+        try (java.io.FileWriter writer = new java.io.FileWriter("boxes.html")) {
+            writer.write(finalHTML);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update() {
         createBettors();
-        printLeaderboard(); // Print to console
-        displayLeaderboardGUI(); // Show in GUI window
+        //printLeaderboard(); // Print to console
+        System.out.println("Leaderboard updated with " + bets.size() + " bettors.");
+        //displayLeaderboardGUI(); // Show in GUI window
         try {
             assembleHTML();
+            BOXassembleHTML();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

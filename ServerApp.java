@@ -61,9 +61,12 @@ public class ServerApp {
             serveFile(exchange, "results.html");
         });
 
-        server.createContext("/trigger", exchange -> {
-
+        server.createContext("/boxes", exchange -> {
+            sb.update();
+            serveFile(exchange, "boxes.html");
         });
+
+  
 
 
         server.start();
