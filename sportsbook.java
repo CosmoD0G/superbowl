@@ -1,7 +1,10 @@
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -21,6 +24,7 @@ class sportsbook {
 
     // Read bettors from CSV file and create bettor objects
     public static void createBettors() {
+        bets.clear();
         String filePath = "props.csv"; // Replace with your CSV file path
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -120,6 +124,33 @@ class sportsbook {
         }
         return confirmed.props[quesIndex] != 0;
     }
+
+    /*public static void editCell(int colIndex, String newValue) throws IOException {
+        ArrayList<String[]> rows = new ArrayList<>();
+
+        // 1. Read CSV
+        try (BufferedReader br = new BufferedReader(new FileReader("props.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                rows.add(line.split(","));
+            }
+        }
+
+        // 2. Modify cell
+        if (rowIndex < rows.size() && colIndex < rows.get(rowIndex).length) {
+            rows.get(rowIndex)[colIndex] = newValue;
+        } else {
+            throw new IndexOutOfBoundsException("Invalid row or column index");
+        }
+
+        // 3. Rewrite CSV
+        try (PrintWriter pw = new PrintWriter(new FileWriter("props.csv"))) {
+            for (String[] row : rows) {
+                pw.println(String.join(",", row));
+            }
+        }
+    }*/
+
 
 
     // Print leaderboard to console
@@ -295,11 +326,19 @@ class sportsbook {
         }
     }
 
-    public sportsbook() throws IOException {
+    public void update() {
         createBettors();
         printLeaderboard(); // Print to console
         displayLeaderboardGUI(); // Show in GUI window
-        assembleHTML();
+        try {
+            assembleHTML();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public sportsbook() throws IOException {
+        update();
     }
 }
-

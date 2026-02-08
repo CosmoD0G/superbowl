@@ -22,12 +22,39 @@
 .buttons {
   display: flex;
   gap: 10px;
+  
 }
 
 .choice {
   padding: 8px 15px;
   font-size: 16px;
-  background-color: aquamarine;
+  background-color: rgb(127, 157, 255);
+  color: black;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.temp {
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: rgb(185, 255, 127);
+  color: black;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.final {
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: rgb(255, 167, 167);
+  color: black;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.result {
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: rgb(231, 231, 231);
+  color: black;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .propHeader {
@@ -55,13 +82,15 @@
   <div class="row">
     <h1 class="propHeader">NATIONAL ANTHEM</h1>
     <div class="buttons">
-      <button class="choice">UNDER</button>
-      <button class="choice">OVER</button>
+      <button class="choice">2:00 or less</button>
+      <button class="choice">2:01 or more</button>
+      <button class="temp">PUSH</button>
+      <button class="final">PUSH</button>
 
     </div>
 
     <div id="indicator">
-      Selected: <span id="selectedValue">Option 1</span>
+    <span id="selectedValue" class="result">Option 1</span>
     </div>
   </div>
 </div>
@@ -85,21 +114,18 @@
       selectedValue.textContent = btn.innerText;
     });
   });
-
-
-// NATL ANTHEM
-function updateNationalAnthem(value) {
-  if (value <= 120) {
-    return "UNDER";
-  } else {
-    return "OVER";
+  function setIndicator1() {
+    
   }
-}
 
-// COMMERCIAL
-function updateCommercial(value) {
-  return value;
-}
+  function sendRequest(final, question, answer) {
+      fetch("/trigger", {
+          method: "POST",
+          body: {
+            final, question, answer
+          }
+      });
+  }
 
 
 

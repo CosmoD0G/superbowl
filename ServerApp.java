@@ -30,6 +30,12 @@ public class ServerApp {
     }
 
     public static void main(String[] args) throws IOException {
+
+        sportsbook sb = new sportsbook();
+
+
+
+
         System.out.println("Working directory: " + System.getProperty("user.dir"));
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
@@ -51,7 +57,12 @@ public class ServerApp {
         });
 
         server.createContext("/results", exchange -> {
+            sb.update();
             serveFile(exchange, "results.html");
+        });
+
+        server.createContext("/trigger", exchange -> {
+
         });
 
 
@@ -60,7 +71,7 @@ public class ServerApp {
 
 
 
-        sportsbook sb = new sportsbook();
+        
         
     }
 }
