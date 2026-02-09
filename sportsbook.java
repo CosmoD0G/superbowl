@@ -348,6 +348,8 @@ class sportsbook {
     public static void createBoxes() {
         String filePath = "boxes.csv"; // Replace with your CSV file path
 
+        rows.clear();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             int line_num = 1;
@@ -365,42 +367,50 @@ class sportsbook {
 
 
     public static String BOXgenerateHTMLStandings() {
-        StringBuilder html = new StringBuilder();
+    StringBuilder html = new StringBuilder();
+    createBoxes();
 
+    html.append("<table>\n");
 
-        createBoxes();
-        html.append("<table>\n");
-        int i = 0;
-        int j = 0;
-        for (String r[] : rows) {
-            html.append("<tr>\n");
-            if (i==0) {
-                i++;
-                continue; // Skip header row
-            }
+    scoreNE = Integer.parseInt(rows.get(11)[0]);
+    scoreSEA = Integer.parseInt(rows.get(11)[1]);
+
+    int i = 0;
+    for (String[] r : rows) {
+        html.append("<tr>\n");
+
+        if (i == 0) {
             for (String c : r) {
-                System.out.println(c);
-                int NEscore = Integer.parseInt(r[0]);
-                if (j==0) {
-                    j++;
-                    continue; // Skip NE score column
-                }
-                if (NEscore == scoreNE && Integer.parseInt(rows.get(0)[j]) == scoreSEA) {
-                    html.append("<td style=\"background-color: #3bff72\">").append(c).append("</td>");
-                } else {
-                    html.append("<td style=\"background-color: #f9f9f9\">").append(c).append("</td>");
-                }
+                html.append("<th style=\"background-color:#9eb8ff\">").append(c).append("</th>");
+            }
+        } else if (i > 0 && i < rows.size()-1) {
+            int j = 0;
+            int NEscore = Integer.parseInt(r[0]);
 
+            for (String c : r) {
+                if (j == 0) {
+                    html.append("<td style=\"background-color:#ffb5b5\">")
+                        .append(c).append("</td>");
+                } else if (NEscore == scoreNE &&
+                           Integer.parseInt(rows.get(0)[j]) == scoreSEA) {
+                    html.append("<td style=\"background-color:#3bff72\">")
+                        .append(c).append("</td>");
+                } else {
+                    html.append("<td style=\"background-color:#f9f9f9\">")
+                        .append(c).append("</td>");
                 }
                 j++;
-                
             }
-            html.append("</tr>\n");
-            i++;
-        
-        html.append("</table>\n");
-        return html.toString();
+        }
+
+        html.append("</tr>\n");
+        i++;
     }
+
+    html.append("</table>\n");
+    return html.toString();
+}
+
 
 
 
@@ -423,11 +433,11 @@ class sportsbook {
                 <h1 class="leaderboard-header">Superbowl LX Score Boxes Results</h1>
                 <button onclick="location.href='results.html'">Go to Prop Bets</button>
                 <div class="leaderboard">
-                    <h2 class="leaderboard-header">Leaderboard</h2>
+                    <h2 class="leaderboard-header">Grid</h2>
+                    <h2 class="leaderboard-header">Rows: <span style="color:#963032">New England</span>\tColumns: <span style="color:#2e4194">Seattle</span></h2>
                     %s
                 </div>
                 <div class="answers">
-                    %s
                 </div>
             </div>
         </body>
@@ -436,7 +446,7 @@ class sportsbook {
 
 
         //String answersHTML = generateHTMLanswers();
-        String finalHTML = String.format(htmlTemplate, FileToString("style.css"), BOXgenerateHTMLStandings(), "");
+        String finalHTML = String.format(htmlTemplate, FileToString("style.css"), BOXgenerateHTMLStandings());
 
         // Write finalHTML to a file named "boxes.html"
         try (java.io.FileWriter writer = new java.io.FileWriter("boxes.html")) {
